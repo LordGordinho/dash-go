@@ -39,9 +39,7 @@ export function makeServer() {
 
       this.get("/users", (schema, request) => {
         const { page = 1, per_page = 10 }: any = request.queryParams
-
-        const total = schema.all("user").length
-
+        
         const pageStart = (Number(page) - 1)  * Number(per_page)
         const pageEnd = pageStart + Number(per_page) 
 

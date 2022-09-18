@@ -25,7 +25,6 @@ const SignIn: NextPage = () => {
 
   const handleSignIn: SubmitHandler<SignInFormProps> = async (data, event) => {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    console.log(data)
   }
 
   return (

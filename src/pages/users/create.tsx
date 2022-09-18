@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -23,6 +24,10 @@ export default function CreateUser() {
     password_confirmation: yup.string().oneOf([null, yup.ref("password")], "Senhas são diferentes")
   })
 
+  const createUser = useMutation(async () => {
+
+  })
+
   const { register, handleSubmit, formState } = useForm<CreateUserFormProps>({
     resolver: yupResolver(CreateUserSchema)
   })
@@ -31,7 +36,6 @@ export default function CreateUser() {
 
   const handleCreateUser: SubmitHandler<CreateUserFormProps> = async (data, event) => {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    console.log(data)
   }
   
   return (

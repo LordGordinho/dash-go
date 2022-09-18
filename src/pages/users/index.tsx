@@ -8,17 +8,22 @@ import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/Sidebar";
 import { api } from "../../services/axios"
-import { useUser } from "../../services/hooks/useUsers";
+import { getUsers, useUser } from "../../services/hooks/useUsers";
 import { queryClient } from "../../services/queryClient";
+import { GetServerSideProps } from "next";
 
 type User = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt: string;
 }
 
-export default function ListUser() {
+interface ListUserProps {
+  users: User[]
+}
+
+export default function ListUser({ users }: ListUserProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [isFirstPage, setIsFirstPage] = useState(true)
   const [isLastPage, setIsLastPage] = useState(false)
@@ -28,7 +33,7 @@ export default function ListUser() {
     lg: true
   })
 
-  const { data, error, isLoading, isFetching } = useUser(currentPage)
+  const { data, error, isLoading, isFetching } = useUser(currentPage, users)
 
   const nextPageHandle = () => {
     if(!data) return;
@@ -46,7 +51,7 @@ export default function ListUser() {
     setCurrentPage((currentPage - 1))
   }
 
-  const handlePrefetchUser = async (userId: number) => {
+  const handlePrefetchUser = async (userId: string) => {
     await queryClient.prefetchQuery(["user", userId], async () => {
       const reponse = await api.get(`/users/${userId}`)
       console.log(reponse.data)
@@ -159,3 +164,13 @@ export default function ListUser() {
     </Box>
   )
 }
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const users = await getUsers(1)
+
+//   return {
+//     props: {
+//       users
+//     }
+//   }
+// }

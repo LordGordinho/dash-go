@@ -1,20 +1,17 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { api } from "../axios"
 type User = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt: string;
 }
 export const getUsers = async (page: number): Promise<User[]> => {
-  console.log(page)
   const { data } = await api('users', {
     params: {
       page
     }
   })
-
-  console.log(data)
   
   const users: [User] = data.users.map( (user: User) => {
     return {
@@ -26,6 +23,9 @@ export const getUsers = async (page: number): Promise<User[]> => {
   return users;
 }
 
-export const useUser = (page: number) => {
-  return useQuery(['users',page], () => getUsers(page))
+export const useUser = (page: number, initialData: User[]) => {
+  
+  return useQuery(['users', page], () => getUsers(page), {
+    initialData: initialData
+   });
 }
